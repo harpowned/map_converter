@@ -47,21 +47,24 @@ for FILENAME in ./input/*.osm.pbf; do
 		WORK_DIR="${BASE_DIR}/work/${MAP_NAME}_${STYLE}"
 		mkdir "$WORK_DIR"
 		cd "$WORK_DIR"
-		java -Xms8g -Xmx16g -jar "$BASE_DIR"/mkgmap/mkgmap.jar \
-			-c "$BASE_DIR"/work/processed_map/template.args \
+		FULL_MAP_NAME="OSM_${MAP_NAME}_${STYLE}"
+		java -Xms8g -Xmx16g -jar $BASE_DIR/mkgmap/mkgmap.jar \
+			--style-file=$BASE_DIR/styles \
+			--style=$STYLE \
 			--route \
 			--index \
 			--split-name-index \
 			--housenumbers \
 			--add-pois-to-areas \
 			--improve-overview \
-			--style-file="$BASE_DIR"/styles/$style \
-			--bounds="$BASE_DIR"/input/bounds \
-			--precomp-sea="$BASE_DIR"/input/sea \
+			--bounds=$BASE_DIR/input/bounds \
+			--precomp-sea=$BASE_DIR/input/sea \
 			--generate-sea \
 			--output-dir=$WORK_DIR \
-			--family-name="OSM ${MAP_NAME} ${STYLE}" \
-			--description="OSM ${MAP_NAME} ${STYLE}" ${COUNTRYARGS} \
+			--family-name=${FULL_MAP_NAME} \
+			--description=${FULL_MAP_NAME} \
+		       	${COUNTRYARGS} \
+			-c $BASE_DIR/work/processed_map/template.args \
 			--gmapsupp 
 		cd "$BASE_DIR"
 		mv $WORK_DIR/gmapsupp.img ./output/${MAP_NAME}_${STYLE}.img
